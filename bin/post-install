@@ -1,0 +1,3 @@
+#!/bin/bash -e
+
+dbname=$OPENSHIFT_APP_NAME

@@ -1,0 +1,3 @@
+#!/bin/bash -e
+
+mkdir -p $OPENSHIFT_CASSANDRA_DIR/cassandra/{log,pid,saved_caches,data,commitlog,pid}

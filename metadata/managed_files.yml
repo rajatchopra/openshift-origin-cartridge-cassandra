@@ -1,0 +1,15 @@
+---
+snapshot_exclusions:
+- cassandra/*
+locked_files:
+- bin/
+- bin/*
+- env/OPENSHIFT_CASSANDRA_USERNAME
+- env/OPENSHIFT_CASSANDR_PASSWORD
+- env/OPENSHIFT_CASSANDRA_URL
+- metadata/
+- metadata/*
+- hooks/
+- hooks/*
+processed_templates:
+- '**/*.erb'

@@ -1,0 +1,93 @@
+#!/bin/bash
+
+source $OPENSHIFT_CARTRIDGE_SDK_BASH
+
+export STOPTIMEOUT=10
+
+function is_running {
+  pidfile=$OPENSHIFT_CASSANDRA_DIR/cassandra/pid/cassandra.pid
+
+  if [ -f $pidfile ]; then
+    cass_pid=`cat $pidfile 2> /dev/null`
+
+    if `ps --pid $cass_pid > /dev/null 2>&1` 
+    then
+      return 0
+    fi
+  fi
+
+  return 1
+}
+# TODO: account for standalone scenario
+# TODO: source user hooks?
+# Start and block until it comes up.
+function start {
+  if ! is_running; then
+    $OPENSHIFT_CASSANDRA_DIR/versions/1.2.5/bin/cassandra -p $OPENSHIFT_CASSANDRA_DIR/cassandra/pid/cassandra.pid
+  else
+    echo "Cassandra already running" 1>&2
+  fi
+}
+
+function wait_for_cassandrad_availability {
+  pidfile=$OPENSHIFT_CASSANDRA_DIR/pid/cassandra.pid
+
+  if [ -n "$OPENSHIFT_CASSANDRA_DB_USERNAME" ]; then
+    i=0
+    sleep 1
+    while (( ! touch_cassandrad ) || [ ! -f $pidfile ]) && [ $i -lt 30 ]
+    do
+      sleep 1
+      i=$(($i + 1))
+    done
+  fi
+}
+
+function stop {
+  if is_running; then
+    pidfile=$OPENSHIFT_CASSANDRA_DIR/cassandra/pid/cassandra.pid
+
+    if [ -f $pidfile ]; then
+      pid=$( /bin/cat $pidfile )
+      /bin/kill $pid
+      ret=$?
+      if [ $ret -eq 0 ]; then
+        TIMEOUT="$STOPTIMEOUT"
+        while [ $TIMEOUT -gt 0 ] && [ -f "$pidfile" ]
+        do
+          /bin/kill -0 "$pid" >/dev/null 2>&1 || break
+          sleep 1
+          let TIMEOUT=${TIMEOUT}-1
+        done
+      fi
+    else
+      echo "Cassandra already stopped" 1>&2
+    fi
+  fi
+}
+
+function status {
+  if is_running; then
+    client_result "Cassandra is running" 
+  else
+    client_result "Cassandra is stopped" 
+  fi
+
+  exit 0
+}
+
+case "$1" in
+  start)
+    start
+  ;;
+  stop)
+    stop
+  ;;
+  status)
+    status
+  ;;
+  restart)
+    stop
+    start
+  ;;
+esac
