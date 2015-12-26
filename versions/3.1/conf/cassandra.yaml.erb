@@ -480,7 +480,9 @@ listen_address: <%= ENV['OPENSHIFT_CASSANDRA_DB_HOST'] %>
 start_native_transport: true
 # port for the CQL native transport to listen for clients on
 # For security reasons, you should not expose this port to the internet.  Firewall it if needed.
-native_transport_port: 19042
+
+native_transport_port: <%= ENV['OPENSHIFT_CASSANDRA_NATIVE_TRANSPORT_PORT'] %>
+
 # Enabling native transport encryption in client_encryption_options allows you to either use
 # encryption for the standard port or to use a dedicated, additional port along with the unencrypted
 # standard native_transport_port.
