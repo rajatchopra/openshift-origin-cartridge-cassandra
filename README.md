@@ -14,6 +14,7 @@ of use:
     OPENSHIFT_CASSANDRA_HOST      The Cassandra IP address
     OPENSHIFT_CASSANDRA_PORT      The Cassandra port
     OPENSHIFT_CASSANDRA_LOG_DIR     The path to the Cassandra log directory
+    OPENSHIFT_CASSANDRA_NATIVE_TRANSPORT_PORT Port for connecting with java client
 
 For more information about environment variables, consult the
 [OpenShift Application Author Guide](https://github.com/openshift/origin-server/blob/master/node/README.writing_applications.md).
