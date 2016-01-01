@@ -30,6 +30,9 @@ Cart-Data:
   - Key: connection_url
     Type: cart_data
     Description: "Cassandra DB connection URL"
+  - Key: OPENSHIFT_CASSANDRA_NATIVE_PROXY_TRANSPORT_PORT
+    Type: cart_data
+    Description: "Unique ID which identified the gear. This value changes between gears."
 Provides:
   - cassandra-3.1
   - cassandra 
