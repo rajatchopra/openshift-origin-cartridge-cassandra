@@ -48,7 +48,7 @@ Endpoints:
     Private-Port-Name: DB_PORT
     Private-Port:      19160
     Public-Port-Name:  DB_PROXY_PORT
-  - Private-IP-Name: IP
+  - Private-IP-Name: DB_HOST
     Private-Port-Name: NATIVE_TRANSPORT_PORT
     Private-Port: 19042
     Public-Port-Name:  NATIVE_PROXY_TRANSPORT_PORT
