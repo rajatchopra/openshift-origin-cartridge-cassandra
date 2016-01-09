@@ -30,6 +30,9 @@ Cart-Data:
   - Key: connection_url
     Type: cart_data
     Description: "Cassandra DB connection URL"
+  - Key: connection_port_cassandra
+    Type: cart_data
+    Description: "Cassandra connection PORT"
 Provides:
   - cassandra-3.1
   - cassandra 
