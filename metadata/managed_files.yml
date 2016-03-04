@@ -5,7 +5,7 @@ locked_files:
 - bin/
 - bin/*
 - env/OPENSHIFT_CASSANDRA_USERNAME
-- env/OPENSHIFT_CASSANDR_PASSWORD
+- env/OPENSHIFT_CASSANDRA_PASSWORD
 - env/OPENSHIFT_CASSANDRA_URL
 - metadata/
 - metadata/*

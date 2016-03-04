@@ -1,11 +1,11 @@
 Name: cassandra
 Cartridge-Short-Name: CASSANDRA
 Architecture: noarch
-Display-Name: Cassandra Database 1.2.5
+Display-Name: Cassandra Database 3.1
 Description: "Cassandra is a multi-user, multi-threaded NoSQL database server."
-Version: '1.2.5'
-Versions: [1.2.5]
-Cartridge-Version: 0.0.1
+Version: '3.1'
+Versions: [3.1]
+Cartridge-Version: 0.0.2
 Cartridge-Vendor: rc
 License: GPL
 Vendor: Oracle
@@ -30,8 +30,11 @@ Cart-Data:
   - Key: connection_url
     Type: cart_data
     Description: "Cassandra DB connection URL"
+  - Key: connection_port_cassandra
+    Type: cart_data
+    Description: "Cassandra connection PORT"
 Provides:
-  - cassandra-1.2.5
+  - cassandra-3.1
   - cassandra 
   - cassandra-singleton-master
 Publishes:
@@ -45,4 +48,8 @@ Endpoints:
     Private-Port-Name: DB_PORT
     Private-Port:      19160
     Public-Port-Name:  DB_PROXY_PORT
+  - Private-IP-Name: DB_HOST
+    Private-Port-Name: NATIVE_TRANSPORT_PORT
+    Private-Port: 19042
+    Public-Port-Name:  NATIVE_PROXY_TRANSPORT_PORT
 Install-Build-Required: false

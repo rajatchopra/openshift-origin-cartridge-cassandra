@@ -23,7 +23,22 @@ function is_running {
 # Start and block until it comes up.
 function start {
   if ! is_running; then
-    $OPENSHIFT_CASSANDRA_DIR/versions/1.2.5/bin/cassandra -p $OPENSHIFT_CASSANDRA_DIR/cassandra/pid/cassandra.pid
+    max_memory_bytes=`oo-cgroup-read memory.limit_in_bytes`
+	max_memory_mb=`expr $max_memory_bytes / 1048576`
+	CASSANDRA_JVM_HEAP_RATIO=0.5
+	CASSANDRA_JVM_HEAP_NEWSIZE=0.25
+	max_heap_size_in_mb=$( echo "$max_memory_mb * $CASSANDRA_JVM_HEAP_RATIO" | bc | awk '{print int($1+0.5)}')
+	heap_newsize_in_mb=$( echo "$max_memory_mb * $CASSANDRA_JVM_HEAP_NEWSIZE" | bc | awk '{print int($1+0.5)}')
+	MAX_HEAP_SIZE="${max_heap_size_in_mb}M"
+	HEAP_NEWSIZE="${heap_newsize_in_mb}M"
+	export MAX_HEAP_SIZE
+	export HEAP_NEWSIZE
+	# set JAVA_HOME and JAVA_PATH for java_8
+	export JAVA_HOME="$OPENSHIFT_DATA_DIR/jdk1.8.0_05"
+	export PATH=$OPENSHIFT_DATA_DIR/jdk1.8.0_05/bin:$PATH
+	$OPENSHIFT_CASSANDRA_DIR/versions/3.1/bin/cassandra -p $OPENSHIFT_CASSANDRA_DIR/cassandra/pid/cassandra.pid
+	export CQLSH_HOST=$OPENSHIFT_DIY_IP
+	export CQLSH_PORT=19160
   else
     echo "Cassandra already running" 1>&2
   fi
@@ -44,6 +59,7 @@ function wait_for_cassandrad_availability {
 }
 
 function stop {
+  echo "************* CALL CASSANDRA STOP **********************************"
   if is_running; then
     pidfile=$OPENSHIFT_CASSANDRA_DIR/cassandra/pid/cassandra.pid
 
